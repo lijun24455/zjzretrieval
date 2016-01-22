@@ -1,0 +1,52 @@
+/**
+ * 标签默认样式
+ */
+* {
+  margin: 0;
+  padding: 0; }
+
+body {
+  font: 14px "Microsoft YaHei",Helvetica,Arial,sans-serif;
+  background-color: #f6f6f6; }
+
+a:hover {
+  text-decoration: none; }
+
+li {
+  list-style: none; }
+
+.head {
+    margin-top: 20px;
+}
+
+.head img {
+    max-height: 20em;
+    width: 100%;
+}
+
+.title {
+    margin-top: 20px;
+}
+
+.img-list {
+    margin-top: 20px;
+}
+
+.modal-dialog {
+    position: relative;
+}
+
+.modal-dialog .modal-content {
+    padding-top: 10px;
+}
+
+.modal-dialog .close {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+}
+
+.modal-dialog .info {
+    max-height: 12em;
+    overflow-y: auto;
+}
