@@ -13,6 +13,7 @@ import util.DoubleUtil;
 import util.ZjzFileUtil;
 
 import java.io.File;
+import java.io.PipedInputStream;
 import java.util.*;
 
 /**
@@ -234,6 +235,8 @@ public class BGAGMFeatureImpl {
         max = max / Math.max(WINDOW_MAX_H, WINDOW_MAX_W);
         min = min / Math.max(WINDOW_MAX_H, WINDOW_MAX_W);
 
+
+
         tmpDataArray.add(max);
         tmpDataArray.add(min);
     }
@@ -388,8 +391,38 @@ public class BGAGMFeatureImpl {
         initWindowsMAX();
         //处理所有线段(包含交叉产生的线段)
         figureOutAllLines(commands);
+        //剔除无效点
+        deletePointlessPoints(pointMap, lineMap);
 
 
+    }
+
+    private void deletePointlessPoints(Map<Integer, Point> pointMap, Map<Integer, Segment> lineMap) {
+        Iterator<Map.Entry<Integer, Point>> it = pointMap.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry<Integer, Point>entry = it.next();
+            Point point = entry.getValue();
+            if (!isPointLinkedMoreThan2Lines(point, lineMap)){
+                it.remove();
+            }
+        }
+    }
+
+    private boolean isPointLinkedMoreThan2Lines(Point tmpPoint, Map<Integer, Segment> lineMap) {
+
+        int count = 0;
+        for (int k :
+                lineMap.keySet()){
+            Segment tmpSegment = lineMap.get(k);
+            if (tmpSegment.getStartPoint().equals(tmpPoint) || tmpSegment.getEndPoint().equals(tmpPoint)){
+                count++;
+            }
+        }
+        if (count >= 2){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     private void figureOutAllLines(String[] commands) {
@@ -919,11 +952,19 @@ public class BGAGMFeatureImpl {
 
     private void print(){
 
+        System.out.println(file.getName() + " has point:  " + pointMap.size());
         for (double num :
                 data){
-            System.out.println(num + ",");
+            System.out.print(num + ",");
         }
 
+    }
+
+    private void printPointMap(){
+        for (int k:
+                pointMap.keySet()){
+            System.out.println(k + " : " + pointMap.get(k).toString());
+        }
     }
 
     public static void main(String[] args){
@@ -936,13 +977,11 @@ public class BGAGMFeatureImpl {
             if (!file.getName().contains("zjz")){
                 continue;
             }
-            System.out.println("-------" + file.getName() + "-------");
             imp = new BGAGMFeatureImpl(file);
             imp.print();
+            System.out.println();
         }
-//        BGAGMFeatureImpl bgagmFeature = new BGAGMFeatureImpl(new File(FILEPATH));
 
-//        bgagmFeature.printCircleSet();
 
     }
 

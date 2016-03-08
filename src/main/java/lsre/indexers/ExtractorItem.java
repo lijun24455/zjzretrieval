@@ -3,9 +3,6 @@ package lsre.indexers;
 import lsre.shapeanalysis.Extractor;
 import lsre.shapeanalysis.LsreFeature;
 import lsre.shapeanalysis.PrimitiveFeature;
-import lsre.shapeanalysis.PrimitiveFeatureExtractor;
-import lsre.shapeanalysis.primitive.BasicGeometricPrimitiveFeature;
-import lsre.shapeanalysis.primitive.BasicGeometricPrimitiveFeatureExtractor;
 
 /**
  * The container for all features;

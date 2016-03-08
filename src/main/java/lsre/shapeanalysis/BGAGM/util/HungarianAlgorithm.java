@@ -47,8 +47,6 @@ import java.util.*;
 
 public class HungarianAlgorithm {
 
-    boolean debug = true;
-
 	//********************************//
 	//METHODS FOR CONSOLE INPUT-OUTPUT//
 	//********************************//
@@ -244,7 +242,7 @@ public class HungarianAlgorithm {
 					step = hg_step4(step, cost, mask, rowCover, colCover, zero_RC);
 					break;
 				case 5:
-				    step = hg_step5(step, mask, rowCover, colCover, zero_RC, path);
+				step = hg_step5(step, mask, rowCover, colCover, zero_RC, path);
 					break;
 				case 6:
 					step = hg_step6(step, cost, rowCover, colCover);
@@ -283,8 +281,7 @@ public class HungarianAlgorithm {
 	public static double getAssignmentSum(double[][] array, int[][] assignments) {
 		//Returns the min/max sum (cost/profit of the assignment) given the
 		//original input matrix and an assignment array (from hgAlgorithmAssignments)
-
-		double sum = 0;
+		double sum = 0; 
 		for (int i=0; i<assignments.length; i++)
 		{
 			sum = sum + array[assignments[i][0]][assignments[i][1]];
@@ -296,7 +293,7 @@ public class HungarianAlgorithm {
 		//What STEP 1 does:
 		//For each row of the cost matrix, find the smallest element
 		//and subtract it from from every other element in its row. 
-		Toast("hg_step1");
+		
 		double minval;
 
 		for (int i=0; i<cost.length; i++)	
@@ -358,18 +355,12 @@ public class HungarianAlgorithm {
 		}
 
 		int count=0;						
-//		for (int j=0; j<colCover.length; j++)	//Check if all columns are covered.
-//		{
-//			count=count+colCover[j];
-//		}
+		for (int j=0; j<colCover.length; j++)	//Check if all columns are covered.
+		{
+			count=count+colCover[j];
+		}
 
-        for (int c = 0; c < mask[0].length; c++){
-            if (colCover[c] == 1){
-                count+=1;
-            }
-        }
-
-		if (count >= mask.length || count >= mask[0].length)	//Should be cost.length but ok, because mask has same dimensions.
+		if (count>=mask.length)	//Should be cost.length but ok, because mask has same dimensions.	
 		{
 			step=7;
 		}
@@ -411,7 +402,7 @@ public class HungarianAlgorithm {
 					}
 				}
 
-				if (starInRow)
+				if (starInRow==true)	
 				{
 					rowCover[row_col[0]] = 1;	//Cover the star's row.
 					colCover[row_col[1]] = 0;	//Uncover its column.
@@ -638,8 +629,7 @@ public class HungarianAlgorithm {
 		// Wide
 		double[][] test3 = {{10,19,8,15,14},
 							{10,18,7,17,17},
-
-
+							{13,16,9,14,10},
 							{12,19,8,18,19}};
 
 		System.out.println(hgAlgorithm(test1, "min"));
@@ -650,7 +640,4 @@ public class HungarianAlgorithm {
 		System.out.println(hgAlgorithm(test3, "max"));
 	}
 
-	public static void Toast(String str){
-		System.out.println(str);
-	}
 }

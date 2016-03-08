@@ -43,7 +43,7 @@ public class queryServlet extends HttpServlet {
             wareList = courseService.getAllCourseList();
         }else {
             wareList = courseService.getCourseListByCourseName(param);
-//            wareList = courseService.getAllCourseList();
+//            wareList = courseService.getCourseListByCourseNameGAG(param);
         }
 
         System.out.println("servlet ----> list size():" + wareList.size());

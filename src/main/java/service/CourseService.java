@@ -1,8 +1,10 @@
 package service;
 
+import lsre.builders.DocumentBuilder;
 import lsre.searchers.GenericShapeSearcher;
 import lsre.searchers.ShapeSearcher;
 import lsre.searchers.ShapeSearcherHits;
+import lsre.shapeanalysis.BGAGM.BGAGMFeature;
 import lsre.shapeanalysis.primitive.BasicGeometricPrimitiveFeature;
 import lsre.utils.SerializationUtils;
 import model.CourseWare;
@@ -71,6 +73,39 @@ public class CourseService {
         for (int i = 0; i<hits.length(); i++){
             String filePath = ir.document(hits.documentID(i)).getValues(lsre.builders.DocumentBuilder.FIELD_NAME_IDENTIFIER)[0];
             byte[] fileProps = ir.document(hits.documentID(i)).getField(lsre.builders.DocumentBuilder.FIELD_NAME_BAG_OF_SHAPES).binaryValue().bytes;
+            double[] feature = SerializationUtils.toDoubleArray(fileProps);
+            tmpWare = new CourseWare();
+            tmpWare.setFilePath(filePath);
+            tmpWare.setFileName(parsePath2FileName(filePath));
+            tmpWare.setImgName(parsePath2ImgName(filePath));
+            tmpWare.setImgPath(parsePath2ImgPath(filePath));
+            assert (feature!=null && feature.length == 6);
+            tmpWare.setFeature(feature);
+            tmpWare.setNumOfPrimitive((int) feature[0]);
+            tmpWare.setNumOfLine((int) feature[1]);
+            tmpWare.setNumOfCircle((int) feature[2]);
+            tmpWare.setNumOfAngle((int) feature[3]);
+            tmpWare.setNumOfRectangle((int) feature[4]);
+            tmpWare.setNumOfTrapezoid((int) feature[5]);
+
+            result.add(tmpWare);
+        }
+
+        return result;
+
+    }
+
+    public List<CourseWare> getCourseListByCourseNameGAG(String name) throws IOException {
+        File queryFile = new File(FILE_PATH_BASE + name);
+        List<CourseWare> result = new ArrayList<CourseWare>();
+        IndexReader ir = DirectoryReader.open(FSDirectory.open(Paths.get(FILE_PATH_BASE)));
+        ShapeSearcher searcher = new GenericShapeSearcher(50, BGAGMFeature.class);
+        ShapeSearcherHits hits = searcher.search(queryFile, ir);
+
+        CourseWare tmpWare = null;
+        for (int i = 0; i<hits.length(); i++){
+            String filePath = ir.document(hits.documentID(i)).getValues(lsre.builders.DocumentBuilder.FIELD_NAME_IDENTIFIER)[0];
+            byte[] fileProps = ir.document(hits.documentID(i)).getField(DocumentBuilder.FIELD_NAME_BILAYER_GAG_MATCHING).binaryValue().bytes;
             double[] feature = SerializationUtils.toDoubleArray(fileProps);
             tmpWare = new CourseWare();
             tmpWare.setFilePath(filePath);

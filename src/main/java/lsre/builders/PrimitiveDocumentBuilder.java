@@ -78,7 +78,6 @@ public class PrimitiveDocumentBuilder implements DocumentBuilder {
 
     public PrimitiveFeature extractFeatures(File file, PrimitiveFeature primitiveFeature){
         assert (file!=null);
-
         primitiveFeature.extract(file);
         return primitiveFeature;
     }

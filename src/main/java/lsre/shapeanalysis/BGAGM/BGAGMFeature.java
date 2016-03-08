@@ -3,7 +3,6 @@ package lsre.shapeanalysis.BGAGM;
 import lsre.builders.DocumentBuilder;
 import lsre.shapeanalysis.BGAGM.util.BGAGMFeatureUtil;
 import lsre.shapeanalysis.BGAGM.util.HungarianAlgorithm;
-import lsre.shapeanalysis.BGAGM.util.HungarianDouble;
 import lsre.shapeanalysis.LsreFeature;
 import lsre.shapeanalysis.PrimitiveFeature;
 import lsre.utils.MetricsUtils;
@@ -64,12 +63,12 @@ public class BGAGMFeature extends BGAGMFeatureImpl implements PrimitiveFeature {
         double cost_cp = MetricsUtils.cosineCoefficient(cp_1, cp_2);
         double cost_layout = MetricsUtils.distL1(layout_1, layout_2);
 
-        double[][] distanceMetric = BGAGMFeatureUtil.getDistanceMetric(BGAGMFeatureUtil.getNodeListFromFeatureVector(pointNum_1, data_1), BGAGMFeatureUtil.getNodeListFromFeatureVector(pointNum_2, data_2));
-
-
-//        HungarianDouble hungarian = new HungarianDouble(distanceMetric);
-        double cost_gag = HungarianAlgorithm.hgAlgorithm(distanceMetric, "min");
-
+        double cost_gag = 0d;
+        double[][] distanceMetric;
+        if (pointNum_1!=0 && pointNum_2!=0){
+            distanceMetric = BGAGMFeatureUtil.getDistanceMetric(BGAGMFeatureUtil.getNodeListFromFeatureVector(pointNum_1, data_1), BGAGMFeatureUtil.getNodeListFromFeatureVector(pointNum_2, data_2));
+            cost_gag = HungarianAlgorithm.hgAlgorithm(distanceMetric, "min");
+        }
 
         return cost_cp + cost_layout + cost_gag;
     }
@@ -94,5 +93,14 @@ public class BGAGMFeature extends BGAGMFeatureImpl implements PrimitiveFeature {
             builder.append(array[i] + " ");
         }
         return builder.toString();
+    }
+
+    private void printMetric(double[][] metric){
+        for (int r = 0; r < metric.length; r++){
+            for (int c = 0; c < metric[r].length; c++){
+                System.out.print(metric[r][c] + ", ");
+            }
+            System.out.println();
+        }
     }
 }
